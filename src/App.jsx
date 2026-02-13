@@ -239,31 +239,27 @@ PRACTICE_CHECKLIST (4-5):
 
       console.log("Calling Anthropic API...");
 
-      const response = await fetch("https://api.anthropic.com/v1/messages", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "x-api-key": apiKey,
-          "anthropic-version": "2023-06-01",
-        },
-        body: JSON.stringify({
-          model: "claude-sonnet-4-20250514",
-          max_tokens: 2500,
-          messages: [{ role: "user", content: prompt }],
-        }),
-      });
+    const response = await fetch('/api/feedback', {
+  method: 'POST',
+  headers: {
+    'Content-Type': 'application/json',
+  },
+  body: JSON.stringify({
+    childName: formData.childName,
+    age: formData.age,
+    songTitle: formData.songTitle,
+    goal: formData.goal,
+    transcript: transcriptText
+  })
+});
 
-      console.log("Response status:", response.status);
+const data = await response.json();
 
-      if (!response.ok) {
-        const errorText = await response.text();
-        console.error("API error:", errorText);
-        return getFallbackFeedback(form);
-      }
+if (!response.ok) {
+  throw new Error(data.error || 'Failed to get feedback');
+}
 
-      const data = await response.json();
-      console.log("API success!");
-      return parseFeedback(data.content[0].text, form);
+return data.feedback;
     } catch (err) {
       console.error("Fetch error:", err);
       return getFallbackFeedback(form);
