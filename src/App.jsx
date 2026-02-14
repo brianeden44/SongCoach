@@ -173,7 +173,7 @@ export default function SongCoachApp() {
       const audioBuffer = await audioContext.decodeAudioData(arrayBuffer);
       const analysis = analyzeAudioFeatures(audioBuffer);
       const feedbackText = await generateFeedback(analysis, formData);
-      setFeedback(feedbackText);
+      setFeedback({ raw: feedbackText });
       setCurrentView("feedback");
     } catch (err) {
       setError("Something went wrong. Please try again!");
@@ -1520,202 +1520,21 @@ return data.feedback;
                   : `Great job singing "${formData.songTitle}" today! Here's what I noticed...`}
               </p>
             </div>
-            {feedback.strengths.length > 0 && (
-              <div
-                style={{
-                  marginBottom: "2rem",
-                  padding: "1.5rem",
-                  background: `linear-gradient(135deg, ${colors.lightBlue}15 0%, ${colors.skyBlue}10 100%)`,
-                  borderRadius: "20px",
-                  border: `2px solid ${colors.skyBlue}30`,
-                }}
-              >
-                <div
-                  style={{
-                    display: "flex",
-                    alignItems: "center",
-                    gap: "0.8rem",
-                    marginBottom: "1rem",
-                  }}
-                >
-                  <Sparkles
-                    size={24}
-                    stroke={colors.skyBlue}
-                    fill={colors.skyBlue}
-                  />
-                  <h3
-                    style={{
-                      fontSize: "1.5rem",
-                      margin: "0",
-                      color: colors.skyBlue,
-                      fontWeight: "600",
-                    }}
-                  >
-                    What You Did Well
-                  </h3>
-                </div>
-                <div
-                  style={{
-                    display: "flex",
-                    flexDirection: "column",
-                    gap: "1rem",
-                  }}
-                >
-                  {feedback.strengths.map((s, i) => (
-                    <p
-                      key={i}
-                      style={{
-                        fontSize: "1.05rem",
-                        color: "#333",
-                        margin: "0",
-                        lineHeight: "1.6",
-                      }}
-                    >
-                      ✨ {s}
-                    </p>
-                  ))}
-                </div>
-              </div>
-            )}
-            {feedback.improvements.length > 0 && (
-              <div
-                style={{
-                  marginBottom: "2rem",
-                  padding: "1.5rem",
-                  background: `linear-gradient(135deg, ${colors.paleRose} 0%, ${colors.blushPink}10 100%)`,
-                  borderRadius: "20px",
-                  border: `2px solid ${colors.blushPink}30`,
-                }}
-              >
-                <div
-                  style={{
-                    display: "flex",
-                    alignItems: "center",
-                    gap: "0.8rem",
-                    marginBottom: "1rem",
-                  }}
-                >
-                  <Heart
-                    size={24}
-                    stroke={colors.blushPink}
-                    fill={colors.blushPink}
-                  />
-                  <h3
-                    style={{
-                      fontSize: "1.5rem",
-                      margin: "0",
-                      color: colors.blushPink,
-                      fontWeight: "600",
-                    }}
-                  >
-                    Let's Work On
-                  </h3>
-                </div>
-                <div
-                  style={{
-                    display: "flex",
-                    flexDirection: "column",
-                    gap: "1.5rem",
-                  }}
-                >
-                  {feedback.improvements.map((imp, i) => (
-                    <div key={i}>
-                      <p
-                        style={{
-                          fontSize: "1.1rem",
-                          color: "#333",
-                          fontWeight: "600",
-                          marginBottom: "0.3rem",
-                        }}
-                      >
-                        💝 {imp.title}
-                      </p>
-                      {imp.explanation && (
-                        <p
-                          style={{
-                            fontSize: "1rem",
-                            color: "#666",
-                            margin: "0 0 0.8rem 0",
-                            lineHeight: "1.6",
-                          }}
-                        >
-                          {imp.explanation}
-                        </p>
-                      )}
-                      {imp.exercise && (
-                        <div
-                          style={{
-                            background: "white",
-                            padding: "1rem",
-                            borderRadius: "12px",
-                            border: "1px solid rgba(255, 182, 193, 0.3)",
-                          }}
-                        >
-                          <p
-                            style={{
-                              fontSize: "0.95rem",
-                              color: "#555",
-                              margin: "0",
-                              fontWeight: "600",
-                            }}
-                          >
-                            🎯 {imp.exercise}
-                          </p>
-                        </div>
-                      )}
-                    </div>
-                  ))}
-                </div>
-              </div>
-            )}
-            {feedback.checklist.length > 0 && (
-              <div
-                style={{
-                  padding: "1.5rem",
-                  background: "rgba(135, 206, 235, 0.08)",
-                  borderRadius: "20px",
-                  border: "2px dashed rgba(135, 206, 235, 0.4)",
-                }}
-              >
-                <h3
-                  style={{
-                    fontSize: "1.3rem",
-                    color: "#333",
-                    marginBottom: "1rem",
-                    fontWeight: "600",
-                  }}
-                >
-                  📝 Your Practice Checklist
-                </h3>
-                <div
-                  style={{
-                    display: "flex",
-                    flexDirection: "column",
-                    gap: "0.7rem",
-                  }}
-                >
-                  {feedback.checklist.map((item, i) => (
-                    <label
-                      key={i}
-                      style={{
-                        display: "flex",
-                        alignItems: "center",
-                        gap: "0.8rem",
-                        fontSize: "1rem",
-                        color: "#555",
-                        cursor: "pointer",
-                      }}
-                    >
-                      <input
-                        type="checkbox"
-                        style={{ width: "20px", height: "20px" }}
-                      />
-                      {item}
-                    </label>
-                  ))}
-                </div>
-              </div>
-            )}
+       {feedback && feedback.raw && (
+  <div style={{
+    background: 'white',
+    padding: '2rem',
+    borderRadius: '20px',
+    boxShadow: '0 4px 20px rgba(0,0,0,0.1)',
+    marginBottom: '2rem',
+    whiteSpace: 'pre-wrap',
+    lineHeight: '1.6'
+  }}>
+    <div style={{ fontSize: '1.1rem', color: '#333' }}>
+      {feedback.raw}
+    </div>
+  </div>
+)}
           </div>
           <div style={{ display: "flex", gap: "1rem", marginBottom: "2rem" }}>
             <button
