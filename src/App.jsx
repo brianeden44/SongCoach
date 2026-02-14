@@ -230,15 +230,6 @@ PRACTICE_CHECKLIST (4-5):
 - [Encouraging close ${form.name ? "with " + form.name : ""}]`;
 
     try {
-      const apiKey = import.meta.env.VITE_ANTHROPIC_API_KEY;
-
-      if (!apiKey) {
-        console.error("API key not found!");
-        return getFallbackFeedback(form);
-      }
-
-      console.log("Calling Anthropic API...");
-
     const response = await fetch('/api/feedback', {
   method: 'POST',
   headers: {
