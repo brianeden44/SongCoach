@@ -240,7 +240,7 @@ PRACTICE_CHECKLIST (4-5):
     age: formData.age,
     songTitle: formData.songTitle,
     goal: formData.goal,
-    transcript: transcriptText
+    transcript: `${formData.childName} sang ${formData.songTitle}. This is a test recording for practice.`
   })
 });
 
